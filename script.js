@@ -1,95 +1,95 @@
 /**
- * FREECRAFT HUB - CORE SCRIPT
- * Разработчик: Kalajer
- * Особенности: Система частиц, поддержка WebP/GIF, защита от ошибок
+ * FREECRAFT HUB - ГЕЙМПЛЕЙНАЯ ЛОГИКА
+ * Реализовано по эскизу Kalajer
  */
 
-// 1. КОНФИГУРАЦИЯ ЛУТА (строго по твоему GitHub)
-const LOOT_CONFIG = [
-    'assets/totem.webp',           // Твой Вебп тотем
-    'assets/iron_ingot.webp',      // Твой Вебп железо
-    'assets/netherite_ingot.png',  // Слиток незерита
-    'assets/diamond.png',          // Алмаз
-    'assets/netherite_sword.gif'   // Анимированный меч
-];
-
-// 2. ИНИЦИАЛИЗАЦИЯ
-document.addEventListener('DOMContentLoaded', () => {
-    const playBtn = document.getElementById('playBtn');
-    
-    if (playBtn) {
-        // Основной обработчик на кнопку PLAY
-        playBtn.addEventListener('click', (e) => {
-            // Запускаем 12 случайных предметов
-            spawnLootBurst(e.clientX, e.clientY, 12);
-            
-            // Можно добавить легкую вибрацию на телефон при клике
-            if (window.navigator.vibrate) {
-                window.navigator.vibrate(50);
-            }
-        });
+// 1. Настройки контента для каждой игры
+const GAME_DATA = {
+    'casino': {
+        title: 'МАЙН-КАЗИНО',
+        desc: 'Испытай удачу! Ставь алмазы и незерит, чтобы сорвать джекпот. Помни: удача любит смелых!',
+        link: 'https://player20020.github.io/FreecraftGame/',
+        loot: ['assets/diamond.png', 'assets/netherite_ingot.png', 'assets/netherite_sword.gif']
+    },
+    'coins': {
+        title: 'FREE COINS',
+        desc: 'Зарабатывай монеты и ресурсы абсолютно бесплатно. Твой путь к богатству начинается здесь!',
+        link: 'https://player20020.github.io/Game-for-diamonds/',
+        loot: ['assets/iron_ingot.webp', 'assets/totem.webp', 'assets/diamond.png']
     }
+};
 
-    // Дополнительно: Фикс баланса (на случай, если юзер перешел из казино с NaN)
-    checkUserBalance();
-});
+// 2. Основная функция выбора игры
+function selectGame(gameKey, event) {
+    const data = GAME_DATA[gameKey];
+    if (!data) return;
 
-/**
- * Функция создания взрыва предметов
- */
-function spawnLootBurst(startX, startY, count) {
+    // Вызываем взрыв предметов прямо из иконки
+    const iconRect = event.currentTarget.getBoundingClientRect();
+    const centerX = iconRect.left + iconRect.width / 2;
+    const centerY = iconRect.top + iconRect.height / 2;
+    
+    spawnLoot(centerX, centerY, data.loot);
+
+    // Заполняем панель управления данными
+    document.getElementById('gameTitle').innerText = data.title;
+    document.getElementById('gameDesc').innerText = data.desc;
+    document.getElementById('finalPlayBtn').href = data.link;
+
+    // Показываем панель (выезжает снизу)
+    document.getElementById('controlCenter').classList.add('active');
+    
+    // Легкая вибрация при выборе
+    if (window.navigator.vibrate) window.navigator.vibrate(70);
+}
+
+// 3. Функция закрытия панели
+function closeControlCenter() {
+    document.getElementById('controlCenter').classList.remove('active');
+}
+
+// 4. Логика вылетающих предметов (Лут)
+function spawnLoot(x, y, lootPool) {
+    const count = 15; // Сколько предметов вылетит
+
     for (let i = 0; i < count; i++) {
         const particle = document.createElement('img');
         
-        // Рандомный выбор предмета
-        const randomSource = LOOT_CONFIG[Math.floor(Math.random() * LOOT_CONFIG.length)];
+        // Берем случайный предмет из пула именно ЭТОЙ игры
+        const randomImg = lootPool[Math.floor(Math.random() * lootPool.length)];
         
-        particle.src = randomSource;
+        particle.src = randomImg;
         particle.className = 'particle';
-        
-        // Стили появления
-        particle.style.left = `${startX}px`;
-        particle.style.top = `${startY}px`;
-        particle.style.position = 'absolute';
-        particle.style.pointerEvents = 'none';
+        particle.style.left = x + 'px';
+        particle.style.top = y + 'px';
         
         document.body.appendChild(particle);
 
-        // Математика полета
-        const angle = Math.random() * Math.PI * 2; // Направление (360 градусов)
-        const velocity = 200 + Math.random() * 400; // Сила вылета
+        // Математика разлета
+        const angle = Math.random() * Math.PI * 2;
+        const velocity = 100 + Math.random() * 400;
         const destX = Math.cos(angle) * velocity;
         const destY = Math.sin(angle) * velocity;
-        const rotation = Math.random() * 1000 - 500; // Случайное вращение
 
-        // Запуск анимации через Web Animations API
-        const animation = particle.animate([
-            { 
-                transform: 'translate(-50%, -50%) rotate(0deg) scale(0.3)', 
-                opacity: 1 
-            },
-            { 
-                transform: `translate(${destX}px, ${destY}px) rotate(${rotation}deg) scale(1.5)`, 
-                opacity: 0 
-            }
+        const anim = particle.animate([
+            { transform: 'translate(-50%, -50%) rotate(0deg) scale(0)', opacity: 1 },
+            { transform: `translate(${destX}px, ${destY}px) rotate(${Math.random() * 720}deg) scale(1.5)`, opacity: 0 }
         ], {
-            duration: 1000 + Math.random() * 800,
+            duration: 800 + Math.random() * 1000,
             easing: 'cubic-bezier(0.1, 0.8, 0.4, 1)'
         });
 
-        // Удаление после финиша
-        animation.onfinish = () => particle.remove();
+        anim.onfinish = () => particle.remove();
     }
 }
 
-/**
- * Проверка и лечение баланса (тот самый фикс)
- */
-function checkUserBalance() {
-    let userData = JSON.parse(localStorage.getItem('mc_users'));
-    if (userData && isNaN(userData.balance)) {
-        userData.balance = 500; // Восстанавливаем до 500, если там NaN
-        localStorage.setItem('mc_users', JSON.stringify(userData));
-        console.log("System: Balance recovered from NaN");
+// 5. Закрытие панели при клике на фон (мимо панели)
+document.addEventListener('click', (e) => {
+    const panel = document.getElementById('controlCenter');
+    const icons = document.querySelector('.floating-icons-menu');
+    
+    // Если кликнули не по панели и не по иконкам — закрываем
+    if (!panel.contains(e.target) && !icons.contains(e.target) && panel.classList.contains('active')) {
+        closeControlCenter();
     }
-}
+});
