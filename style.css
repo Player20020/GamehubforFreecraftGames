@@ -1,158 +1,200 @@
-/* Переменные для легкой настройки */
+/* Основные переменные и шрифты */
 :root {
     --neon-purple: #bc13fe;
     --neon-pink: #ff00ff;
-    --dark-bg: #0a001a;
+    --dark-void: #0a001a;
+    --glass-ui: rgba(255, 255, 255, 0.05);
     --glass-border: rgba(255, 255, 255, 0.15);
-    --text-shadow: 0 0 10px rgba(188, 19, 254, 0.8);
 }
 
-* {
-    box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    width: 100vw;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Montserrat', sans-serif;
-    color: white;
-    overflow: hidden;
+    margin: 0; padding: 0;
+    height: 100vh; width: 100vw;
+    display: flex; flex-direction: column; align-items: center;
+    font-family: 'Montserrat', 'Segoe UI', sans-serif;
+    color: white; overflow: hidden; /* Запрещаем прокрутку */
     
-    /* ТВОЙ ФОН с наложением градиента для глубины */
-    background: linear-gradient(rgba(10, 0, 26, 0.5), rgba(10, 0, 26, 0.5)), 
-                url('assets/Backgroundforgame.webp') no-repeat center center;
+    /* ТВОЙ ФОН на весь экран */
+    background: linear-gradient(rgba(10, 0, 26, 0.6), rgba(10, 0, 26, 0.6)), 
+                url('assets/Backgroundforgame.webp') no-repeat center center fixed;
     background-size: cover;
 }
 
-/* --- ЛОГОТИП-АВАТАРКА --- */
-.logo-wrapper {
-    position: relative;
-    margin-bottom: 40px;
-    z-index: 10;
+/* --- 1. АВАТАРКА (ВЕРХ ЭКРАНА) --- */
+.logo-area {
+    position: absolute;
+    top: 10%; /* Отступ сверху (как на рисунке) */
     animation: floatingLogo 4s ease-in-out infinite;
+    z-index: 100;
 }
 
 .main-avatar {
-    width: 150px;
-    height: 150px;
+    width: 140px; height: 140px;
     border-radius: 50%;
     border: 4px solid var(--neon-purple);
-    box-shadow: 0 0 30px var(--neon-purple), inset 0 0 15px var(--neon-purple);
+    box-shadow: 0 0 40px rgba(188, 19, 254, 0.8), inset 0 0 20px rgba(188, 19, 254, 0.4);
     object-fit: cover;
-    transition: 0.5s;
 }
 
 /* Эффект сверкания на аве */
-.logo-wrapper::after {
-    content: '';
-    position: absolute;
-    top: 0; left: -100%;
-    width: 50%; height: 100%;
+.logo-area::after {
+    content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
     background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-    transform: skewX(-20deg);
-    animation: autoShine 6s infinite linear;
+    transform: skewX(-20deg); animation: autoShine 6s infinite linear;
 }
 
-/* --- КОНТЕЙНЕР КНОПОК --- */
-.games-menu {
-    display: flex;
-    gap: 40px;
-    margin-bottom: 60px;
+/* --- 2. КНОПКИ-ИКОНКИ (ХАОС ПО ЦЕНТРУ) --- */
+.floating-icons-menu {
+    position: absolute;
+    top: 40%; /* Размещаем в центре экрана */
+    width: 80%; /* Занимаем ширину (как на рисунке) */
+    height: 30vh; /* Высота зоны кнопок */
+    z-index: 50;
+    pointer-events: none; /* Контейнер не мешает, только иконки кликабельны */
 }
 
-.hub-button {
-    width: 200px;
-    height: 260px;
+/* Общие стили для круглых иконок */
+.hub-icon-btn {
+    position: absolute;
+    width: 100px; height: 100px; /* Сделали их круглыми (как на рисунке) */
+    border-radius: 50%;
     background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(15px);
-    border: 1px solid var(--glass-border);
-    border-radius: 30px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    color: white;
-    transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    animation: floatingButtons 5s ease-in-out infinite;
-}
-
-.hub-button:nth-child(2) { animation-delay: 1s; }
-
-.hub-button:hover {
-    transform: translateY(-20px) scale(1.08);
-    border-color: var(--neon-purple);
-    box-shadow: 0 0 40px rgba(188, 19, 254, 0.5);
-    background: rgba(255, 255, 255, 0.08);
-}
-
-.btn-icon {
-    font-size: 5rem;
-    margin-bottom: 20px;
-    filter: drop-shadow(0 0 10px var(--neon-purple));
-}
-
-.btn-label {
-    font-weight: 900;
-    letter-spacing: 2px;
-    text-shadow: var(--text-shadow);
-}
-
-/* --- КНОПКА PLAY (ULTRA PULSE) --- */
-.call-to-action {
-    background: linear-gradient(45deg, var(--neon-pink), var(--neon-purple));
-    padding: 20px 100px;
-    border-radius: 50px;
-    font-size: 2.5rem;
-    font-weight: 900;
-    border: none;
-    color: white;
+    border: 2px solid var(--glass-border);
+    backdrop-filter: blur(10px);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 3.5rem; /* Размер иконки (🎰💎➕) */
     cursor: pointer;
-    text-transform: uppercase;
+    transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    pointer-events: auto; /* Включаем клики */
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+}
+
+/* Свечение при наведении */
+.hub-icon-btn:hover {
+    transform: scale(1.15) translateY(-5px);
+    border-color: var(--neon-purple);
+    box-shadow: 0 0 40px rgba(188, 19, 254, 0.8);
+}
+
+/* РАССТАНОВКА ПО РИСУНКУ */
+.casino-icon {
+    left: 10%; top: 10%; /* Кнопка Верх-Вниз (Слева) */
+    animation: floatingIcon_1 5s ease-in-out infinite;
+}
+
+.coins-icon {
+    right: 10%; top: 15%; /* Кнопка Верх-Вниз (Справа) */
+    animation: floatingIcon_2 5.5s ease-in-out infinite;
+    animation-delay: 1s;
+}
+
+.soon-icon {
+    left: 40%; bottom: 10%; /* Кнопка Верх-Вниз (Снизу-посередине) */
+    opacity: 0.5; /* Заблокирована */
+    animation: floatingIcon_3 6s ease-in-out infinite;
+    animation-delay: 2s;
+}
+
+/* --- 3. СКРЫТЫЙ КОНТРОЛЬНЫЙ ЦЕНТР (СНИЗУ) --- */
+.control-center {
+    position: fixed;
+    bottom: -100%; /* Полностью скрыт снизу */
+    left: 50%; transform: translateX(-50%);
+    width: 90%; max-width: 500px;
+    background: rgba(10, 0, 26, 0.95);
+    backdrop-filter: blur(20px);
+    border: 2px solid var(--neon-purple);
+    border-radius: 30px 30px 0 0; /* Округлые края сверху */
+    padding: 30px;
+    z-index: 200;
+    display: flex; flex-direction: column; align-items: center;
+    transition: bottom 0.5s cubic-bezier(0.2, 0.8, 0.4, 1); /* Плавное выезжание */
+    box-shadow: 0 -10px 40px rgba(188, 19, 254, 0.3);
+}
+
+/* Класс для показа панели (добавим JS) */
+.control-center.active {
+    bottom: 0; /* Выезжает в рабочее положение */
+}
+
+/* Кнопка закрытия панели (крестик) */
+.close-btn {
+    position: absolute; top: 15px; right: 20px;
+    background: none; border: none; color: white;
+    font-size: 2rem; cursor: pointer; opacity: 0.5;
+    transition: 0.3s;
+}
+.close-btn:hover { opacity: 1; transform: rotate(90deg); }
+
+/* Описание игры */
+.game-details {
+    text-align: center; margin-bottom: 30px; margin-top: 10px;
+}
+
+.game-details h2 {
+    font-size: 2.2rem; margin: 0 0 10px 0;
+    text-transform: uppercase; letter-spacing: 3px;
+    text-shadow: 0 0 10px rgba(188, 19, 254, 0.8);
+    background: linear-gradient(to right, #ffffff, var(--neon-purple));
+    -webkit-background-clip: text; color: transparent;
+}
+
+.game-details p {
+    font-size: 1.1rem; color: rgba(255, 255, 255, 0.8);
+    line-height: 1.6; max-width: 400px; margin: 0;
+}
+
+/* КНОПКА PLAY-ИГРАТЬ (Внутри панели) */
+.call-to-action-compact {
+    background: linear-gradient(45deg, var(--neon-pink), var(--neon-purple));
+    padding: 20px 80px;
+    border-radius: 60px;
+    font-size: 2rem; font-weight: 900;
+    border: none; color: white;
+    cursor: pointer; text-transform: uppercase;
+    text-decoration: none; /* Убираем подчеркивание */
     box-shadow: 0 0 20px var(--neon-purple);
     animation: pulsePlay 2s infinite ease-in-out;
     transition: 0.3s;
+    letter-spacing: 2px;
+}
+.call-to-action-compact:hover {
+    filter: brightness(1.2); box-shadow: 0 0 50px rgba(255, 0, 255, 0.8);
 }
 
-.call-to-action:hover {
-    filter: brightness(1.2);
-    box-shadow: 0 0 50px var(--neon-pink);
-}
-
-/* --- АНИМАЦИИ --- */
+/* --- АНИМАЦИИ (ПОКАЧИВАНИЕ) --- */
 @keyframes floatingLogo {
-    0%, 100% { transform: translateY(0) rotate(0deg); }
-    50% { transform: translateY(-30px) rotate(2deg); }
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
 }
 
-@keyframes floatingButtons {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-15px); }
+/* Разное покачивание для иконок */
+@keyframes floatingIcon_1 {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(-10px, -25px); }
+}
+@keyframes floatingIcon_2 {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(15px, -20px); }
+}
+@keyframes floatingIcon_3 {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(0, -15px); }
 }
 
 @keyframes autoShine {
-    0% { left: -150%; }
-    30% { left: 250%; }
-    100% { left: 250%; }
+    0% { left: -150%; } 30% { left: 250%; } 100% { left: 250%; }
 }
 
 @keyframes pulsePlay {
-    0%, 100% { transform: scale(1); box-shadow: 0 0 20px var(--neon-purple); }
-    50% { transform: scale(1.1); box-shadow: 0 0 60px var(--neon-pink); }
+    0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(188, 19, 254, 0.6); }
+    50% { transform: scale(1.08); box-shadow: 0 0 60px rgba(255, 0, 255, 0.8); }
 }
 
-/* ЧАСТИЦЫ ЛУТА */
+/* Стиль частиц (лута) */
 .particle {
-    position: absolute;
-    pointer-events: none;
-    width: 60px;
-    height: 60px;
-    z-index: 999;
-    filter: drop-shadow(0 0 10px white);
+    position: absolute; pointer-events: none;
+    width: 60px; height: 60px; z-index: 999;
 }
