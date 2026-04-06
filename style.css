@@ -1,140 +1,121 @@
 :root {
     --neon-purple: #bc13fe;
     --neon-pink: #ff00ff;
-    --glass-border: rgba(255, 255, 255, 0.2);
+    --glass: rgba(255, 255, 255, 0.07);
 }
 
-* { box-sizing: border-box; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-    margin: 0; padding: 0;
-    height: 100vh; width: 100vw;
-    display: flex; flex-direction: column;
-    font-family: 'Montserrat', sans-serif;
-    color: white; overflow: hidden;
-    background: linear-gradient(rgba(10, 0, 26, 0.7), rgba(10, 0, 26, 0.7)), 
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
                 url('assets/Backgroundforgame.webp') no-repeat center center fixed;
     background-size: cover;
+    overflow: hidden;
+    font-family: sans-serif;
 }
 
-/* --- АВАТАРКА --- */
+/* --- АВАТАРКА (ФИКСИРОВАННЫЙ ВЕРХ) --- */
 .logo-area {
-    position: absolute;
-    top: 8%; left: 50%;
-    transform: translateX(-50%);
-    z-index: 100;
+    margin-top: 40px;
+    flex-shrink: 0;
 }
 
 .main-avatar {
-    width: 140px; height: 140px;
+    width: 130px;
+    height: 130px;
     border-radius: 50%;
     border: 4px solid var(--neon-purple);
     box-shadow: 0 0 30px var(--neon-purple);
-    animation: floatingVertical 4s ease-in-out infinite;
+    animation: bounce 4s ease-in-out infinite;
 }
 
-/* --- КНОПКИ (РАЗНЕСЛИ ПО ЭКРАНУ) --- */
+/* --- КОНТЕЙНЕР КНОПОК (ГЛАВНЫЙ ФИКС) --- */
 .floating-icons-menu {
-    position: relative;
-    width: 100%; height: 100%;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly; /* Равномерно распределяет кнопки по высоте */
+    align-items: center;
+    width: 100%;
+    padding: 20px 0;
 }
 
 .hub-icon-btn {
-    position: absolute;
-    /* РАЗМЕР КНОПОК - ТЕПЕРЬ СОЛИДНЫЕ */
-    width: 125px; height: 125px; 
+    width: 115px;
+    height: 115px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.05);
-    border: 2px solid var(--glass-border);
-    backdrop-filter: blur(15px);
-    display: flex; align-items: center; justify-content: center;
+    background: var(--glass);
+    border: 2px solid rgba(255,255,255,0.2);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-size: 4rem;
     cursor: pointer;
-    box-shadow: 0 0 20px rgba(188, 19, 254, 0.3);
-    animation: floatingVertical 5s ease-in-out infinite;
+    box-shadow: 0 0 20px rgba(188, 19, 254, 0.2);
+    transition: 0.3s;
+    position: relative;
+    /* Убираем абсолютное позиционирование, Flex всё сделает сам */
 }
 
-/* Точные позиции, чтобы не липли */
-.casino-icon {
-    left: 10%; top: 35%; /* Левая кнопка */
-}
+/* Чередуем кнопки: лево - право - центр */
+.casino-icon { align-self: flex-start; margin-left: 15%; animation: bounce 5s infinite; }
+.coins-icon { align-self: flex-end; margin-right: 15%; animation: bounce 4.5s infinite; }
+.soon-icon { opacity: 0.4; animation: bounce 6s infinite; }
 
-.coins-icon {
-    right: 10%; top: 45%; /* Правая кнопка - ниже первой */
-    animation-delay: 1.5s;
-}
-
-.soon-icon {
-    left: 50%; bottom: 15%; /* Нижняя по центру */
-    transform: translateX(-50%);
-    opacity: 0.4;
-    animation-delay: 2.5s;
-}
-
-/* --- ВЫЕЗЖАЮЩАЯ ПАНЕЛЬ (ИЗ КНОПКИ) --- */
+/* --- ПАНЕЛЬ (ВЫЕЗД СНИЗУ) --- */
 .control-center {
     position: fixed;
-    /* Изначально глубоко внизу */
-    bottom: -100%; 
-    left: 5%; right: 5%;
-    width: 90%;
-    background: rgba(15, 0, 30, 0.95);
-    backdrop-filter: blur(20px);
-    border: 2px solid var(--neon-purple);
+    bottom: -100%;
+    left: 0;
+    width: 100%;
+    background: rgba(10, 0, 20, 0.98);
+    border-top: 3px solid var(--neon-purple);
     border-radius: 40px 40px 0 0;
     padding: 40px 20px;
-    z-index: 200;
-    display: flex; flex-direction: column; align-items: center;
-    /* Плавный выезд */
-    transition: all 0.7s cubic-bezier(0.19, 1, 0.22, 1);
-    box-shadow: 0 -20px 50px rgba(0,0,0,0.8);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: bottom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 1000;
 }
 
 .control-center.active {
-    bottom: 0; /* Выезжает в рабочее положение */
-}
-
-/* Кнопка закрытия */
-.close-btn {
-    position: absolute; top: 15px; right: 25px;
-    background: none; border: none; color: white;
-    font-size: 2.5rem; cursor: pointer;
+    bottom: 0;
 }
 
 .game-details h2 {
-    font-size: 2.8rem; margin: 0 0 15px 0;
-    text-shadow: 0 0 15px var(--neon-purple);
+    font-size: 2.2rem;
+    color: #fff;
+    text-shadow: 0 0 10px var(--neon-purple);
+    margin-bottom: 10px;
 }
 
 .game-details p {
-    font-size: 1.3rem; line-height: 1.6;
-    margin-bottom: 30px; opacity: 0.9;
+    font-size: 1.1rem;
+    color: #ccc;
     text-align: center;
+    margin-bottom: 30px;
 }
 
 .call-to-action-compact {
     background: linear-gradient(45deg, var(--neon-pink), var(--neon-purple));
-    padding: 22px 90px;
+    padding: 20px 80px;
     border-radius: 50px;
-    font-size: 2.2rem; font-weight: 900;
-    color: white; text-decoration: none;
-    box-shadow: 0 0 30px var(--neon-pink);
-    animation: pulsePlay 2s infinite;
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.8rem;
+    font-weight: bold;
+    box-shadow: 0 0 20px var(--neon-pink);
 }
 
-/* --- АНИМАЦИИ --- */
-@keyframes floatingVertical {
+/* --- АНИМАЦИЯ ТОЛЬКО ВВЕРХ-ВНИЗ --- */
+@keyframes bounce {
     0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-35px); }
-}
-
-@keyframes pulsePlay {
-    0%, 100% { transform: scale(1); filter: brightness(1); }
-    50% { transform: scale(1.05); filter: brightness(1.2); }
-}
-
-/* Частицы лута */
-.particle {
-    position: absolute; pointer-events: none;
-    width: 60px; height: 60px; z-index: 1000;
+    50% { transform: translateY(-25px); }
 }
