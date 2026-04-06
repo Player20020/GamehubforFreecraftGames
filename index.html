@@ -3,32 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KALAJER HUB | FREECRAFT</title>
+    <title>KALAJER HUB</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="logo-wrapper">
-        <img src="assets/avatar.png" alt="Kalajer" class="main-avatar">
+    <div class="background-overlay"></div>
+
+    <div class="logo-area">
+        <img src="assets/avatar.png" alt="Kalajer Logo" class="main-avatar">
     </div>
 
-    <div class="games-menu">
-        <a href="https://player20020.github.io/FreecraftGame/" class="hub-button">
-            <div class="btn-icon">🎰</div>
-            <div class="btn-label">CASINO</div>
-        </a>
+    <div class="floating-icons-menu">
+        
+        <div class="hub-icon-btn casino-icon" onclick="selectGame('casino', event)">
+            <span>🎰</span>
+        </div>
 
-        <a href="https://player20020.github.io/Game-for-diamonds/" class="hub-button">
-            <div class="btn-icon">💎</div>
-            <div class="btn-label">FREE COINS</div>
-        </a>
+        <div class="hub-icon-btn coins-icon" onclick="selectGame('coins', event)">
+            <span>💎</span>
+        </div>
+
+        <div class="hub-icon-btn soon-icon locked">
+            <span>➕</span>
+        </div>
     </div>
 
-    <div class="action-zone">
-        <button id="playBtn" class="call-to-action">PLAY</button>
+    <div class="control-center" id="controlCenter">
+        <button class="close-btn" onclick="closeControlCenter()">×</button>
+        
+        <div class="game-details">
+            <h2 id="gameTitle">GAME TITLE</h2>
+            <p id="gameDesc">Описание игры здесь...</p>
+        </div>
+
+        <a href="#" id="finalPlayBtn" class="call-to-action-compact">ИГРАТЬ</a>
     </div>
 
     <script src="script.js"></script>
 </body>
 </html>
- 
