@@ -1,4 +1,4 @@
-/* Основные переменные и шрифты */
+/* Переменные и шрифты */
 :root {
     --neon-purple: #bc13fe;
     --neon-pink: #ff00ff;
@@ -22,20 +22,24 @@ body {
     background-size: cover;
 }
 
-/* --- 1. АВАТАРКА (ВЕРХ ЭКРАНА) --- */
+/* --- 1. ИСПРАВЛЕННАЯ АВАТАРКА (ВЕРХ ЭКРАНА) --- */
 .logo-area {
     position: absolute;
-    top: 10%; /* Отступ сверху (как на рисунке) */
-    animation: floatingLogo 4s ease-in-out infinite;
+    top: 5vh; /* Отступ сверху (стабильный на всех телефонах) */
+    display: flex; justify-content: center; width: 100%;
     z-index: 100;
 }
 
 .main-avatar {
-    width: 140px; height: 140px;
+    /* ПОКАЧИВАЕТСЯ НА МЕСТЕ, КАК ТЫ ПРОСИЛ */
+    width: 120px; height: 120px;
     border-radius: 50%;
     border: 4px solid var(--neon-purple);
     box-shadow: 0 0 40px rgba(188, 19, 254, 0.8), inset 0 0 20px rgba(188, 19, 254, 0.4);
     object-fit: cover;
+    
+    /* Единая анимация для авы и кнопок (только вверх-вниз) */
+    animation: floatingVertical 4s ease-in-out infinite;
 }
 
 /* Эффект сверкания на аве */
@@ -45,30 +49,31 @@ body {
     transform: skewX(-20deg); animation: autoShine 6s infinite linear;
 }
 
-/* --- 2. КНОПКИ-ИКОНКИ (ХАОС ПО ЦЕНТРУ) --- */
+/* --- 2. КОНТЕЙНЕР ДЛЯ ХАОСА (ИСПРАВЛЕННЫЙ РАЗБРОС) --- */
 .floating-icons-menu {
     position: absolute;
-    top: 40%; /* Размещаем в центре экрана */
-    width: 80%; /* Занимаем ширину (как на рисунке) */
-    height: 30vh; /* Высота зоны кнопок */
+    top: 35vh; /* Размещаем зону кнопок в центре экрана */
+    width: 85%; /* Уменьшили ширину, чтобы не улетали */
+    height: 35vh; /* Высота зоны кнопок */
     z-index: 50;
-    pointer-events: none; /* Контейнер не мешает, только иконки кликабельны */
 }
 
-/* Общие стили для круглых иконок */
+/* Общие стили для БОЛЬШИХ круглых иконок */
 .hub-icon-btn {
     position: absolute;
-    width: 100px; height: 100px; /* Сделали их круглыми (как на рисунке) */
+    width: 110px; height: 110px; /* КНОПКИ СДЕЛАЛИ БОЛЬШЕ (были маленькие) */
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(255, 255, 255, 0.04);
     border: 2px solid var(--glass-border);
     backdrop-filter: blur(10px);
     display: flex; align-items: center; justify-content: center;
-    font-size: 3.5rem; /* Размер иконки (🎰💎➕) */
+    font-size: 3.8rem; /* Иконку внутри тоже увеличили */
     cursor: pointer;
     transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    pointer-events: auto; /* Включаем клики */
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
+    
+    /* ТОЛЬКО ВВЕРХ И ВНИЗ (ОНИ БОЛЬШЕ НЕ УХОДЯТ В БОК) */
+    animation: floatingVertical 4s ease-in-out infinite;
 }
 
 /* Свечение при наведении */
@@ -78,40 +83,39 @@ body {
     box-shadow: 0 0 40px rgba(188, 19, 254, 0.8);
 }
 
-/* РАССТАНОВКА ПО РИСУНКУ */
+/* РАССТАНОВКА (СТАБИЛЬНАЯ НА ВСЕХ ТЕЛЕФОНАХ) */
 .casino-icon {
-    left: 10%; top: 10%; /* Кнопка Верх-Вниз (Слева) */
-    animation: floatingIcon_1 5s ease-in-out infinite;
+    left: 5vw; top: 5vh; /* Разместили более стабильно */
 }
 
 .coins-icon {
-    right: 10%; top: 15%; /* Кнопка Верх-Вниз (Справа) */
-    animation: floatingIcon_2 5.5s ease-in-out infinite;
-    animation-delay: 1s;
+    right: 5vw; top: 10vh; /* Разместили более стабильно */
+    animation-delay: 1.5s;
 }
 
 .soon-icon {
-    left: 40%; bottom: 10%; /* Кнопка Верх-Вниз (Снизу-посередине) */
-    opacity: 0.5; /* Заблокирована */
-    animation: floatingIcon_3 6s ease-in-out infinite;
+    left: 30vw; bottom: 0; /* Разместили более стабильно */
+    opacity: 0.5;
     animation-delay: 2s;
 }
 
-/* --- 3. СКРЫТЫЙ КОНТРОЛЬНЫЙ ЦЕНТР (СНИЗУ) --- */
+/* --- 3. СКРЫТЫЙ КОНТРОЛЬНЫЙ ЦЕНТР (СНИЗУ, ВЫЕЗЖАЕТ КРАСИВО) --- */
 .control-center {
     position: fixed;
-    bottom: -100%; /* Полностью скрыт снизу */
+    /* ИСПРАВИЛИ: ПОЯВЛЕНИЕ. Тепеперь она ПОЛНОСТЬЮ выезжает снизу */
+    bottom: -120%; /* Скрыта за пределами экрана */
     left: 50%; transform: translateX(-50%);
-    width: 90%; max-width: 500px;
-    background: rgba(10, 0, 26, 0.95);
-    backdrop-filter: blur(20px);
+    width: 95%; max-width: 600px; /* Сделали панель шире */
+    background: rgba(10, 0, 26, 0.98);
+    backdrop-filter: blur(25px);
     border: 2px solid var(--neon-purple);
-    border-radius: 30px 30px 0 0; /* Округлые края сверху */
-    padding: 30px;
+    border-radius: 35px 35px 0 0; /* Округлые края сверху */
+    padding: 35px; /* Увеличили внутренние отступы */
     z-index: 200;
     display: flex; flex-direction: column; align-items: center;
-    transition: bottom 0.5s cubic-bezier(0.2, 0.8, 0.4, 1); /* Плавное выезжание */
-    box-shadow: 0 -10px 40px rgba(188, 19, 254, 0.3);
+    /* ПЛАВНОЕ ВЫЕЗЖАНИЕ (Cubic Bezier дает красивый эффект) */
+    transition: bottom 0.6s cubic-bezier(0.25, 1, 0.5, 1); 
+    box-shadow: 0 -15px 50px rgba(188, 19, 254, 0.4);
 }
 
 /* Класс для показа панели (добавим JS) */
@@ -121,67 +125,55 @@ body {
 
 /* Кнопка закрытия панели (крестик) */
 .close-btn {
-    position: absolute; top: 15px; right: 20px;
+    position: absolute; top: 20px; right: 25px;
     background: none; border: none; color: white;
-    font-size: 2rem; cursor: pointer; opacity: 0.5;
+    font-size: 2.5rem; cursor: pointer; opacity: 0.6;
     transition: 0.3s;
 }
 .close-btn:hover { opacity: 1; transform: rotate(90deg); }
 
 /* Описание игры */
 .game-details {
-    text-align: center; margin-bottom: 30px; margin-top: 10px;
+    text-align: center; margin-bottom: 35px; margin-top: 15px;
 }
 
 .game-details h2 {
-    font-size: 2.2rem; margin: 0 0 10px 0;
-    text-transform: uppercase; letter-spacing: 3px;
-    text-shadow: 0 0 10px rgba(188, 19, 254, 0.8);
+    font-size: 2.5rem; margin: 0 0 15px 0; /* Заголовок больше */
+    text-transform: uppercase; letter-spacing: 4px;
+    text-shadow: 0 0 15px rgba(188, 19, 254, 0.9);
     background: linear-gradient(to right, #ffffff, var(--neon-purple));
     -webkit-background-clip: text; color: transparent;
 }
 
 .game-details p {
-    font-size: 1.1rem; color: rgba(255, 255, 255, 0.8);
-    line-height: 1.6; max-width: 400px; margin: 0;
+    /* ОПИСАНИЕ УВЕЛИЧИЛИ (было мелким) */
+    font-size: 1.25rem; color: rgba(255, 255, 255, 0.9);
+    line-height: 1.8; max-width: 450px; margin: 0;
 }
 
-/* КНОПКА PLAY-ИГРАТЬ (Внутри панели) */
+/* КНОПКА PLAY-ИГРАТЬ (Внутри панели, БОЛЬШАЯ И ПУЛЬСИРУЮЩАЯ) */
 .call-to-action-compact {
     background: linear-gradient(45deg, var(--neon-pink), var(--neon-purple));
-    padding: 20px 80px;
-    border-radius: 60px;
-    font-size: 2rem; font-weight: 900;
+    padding: 22px 100px; /* Кнопку тоже увеличили */
+    border-radius: 65px;
+    font-size: 2.2rem; font-weight: 900;
     border: none; color: white;
     cursor: pointer; text-transform: uppercase;
     text-decoration: none; /* Убираем подчеркивание */
-    box-shadow: 0 0 20px var(--neon-purple);
+    box-shadow: 0 0 25px var(--neon-purple);
     animation: pulsePlay 2s infinite ease-in-out;
     transition: 0.3s;
-    letter-spacing: 2px;
+    letter-spacing: 3px;
 }
 .call-to-action-compact:hover {
-    filter: brightness(1.2); box-shadow: 0 0 50px rgba(255, 0, 255, 0.8);
+    filter: brightness(1.2); box-shadow: 0 0 60px rgba(255, 0, 255, 0.9);
 }
 
 /* --- АНИМАЦИИ (ПОКАЧИВАНИЕ) --- */
-@keyframes floatingLogo {
+/* ЕДИНАЯ АНИМАЦИЯ: ТОЛЬКО ВВЕРХ И ВНИЗ (без разлета в бока) */
+@keyframes floatingVertical {
     0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-20px); }
-}
-
-/* Разное покачивание для иконок */
-@keyframes floatingIcon_1 {
-    0%, 100% { transform: translate(0, 0); }
-    50% { transform: translate(-10px, -25px); }
-}
-@keyframes floatingIcon_2 {
-    0%, 100% { transform: translate(0, 0); }
-    50% { transform: translate(15px, -20px); }
-}
-@keyframes floatingIcon_3 {
-    0%, 100% { transform: translate(0, 0); }
-    50% { transform: translate(0, -15px); }
+    50% { transform: translateY(-30px); }
 }
 
 @keyframes autoShine {
@@ -189,8 +181,8 @@ body {
 }
 
 @keyframes pulsePlay {
-    0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(188, 19, 254, 0.6); }
-    50% { transform: scale(1.08); box-shadow: 0 0 60px rgba(255, 0, 255, 0.8); }
+    0%, 100% { transform: scale(1); box-shadow: 0 0 25px rgba(188, 19, 254, 0.7); }
+    50% { transform: scale(1.1); box-shadow: 0 0 70px rgba(255, 0, 255, 0.9); }
 }
 
 /* Стиль частиц (лута) */
