@@ -1,133 +1,158 @@
-/* Основные цвета и настройки */
+/* Переменные для легкой настройки */
 :root {
     --neon-purple: #bc13fe;
-    --deep-purple: #1a0033;
-    --glass-bg: rgba(255, 255, 255, 0.05);
-    --shine-grad: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent);
+    --neon-pink: #ff00ff;
+    --dark-bg: #0a001a;
+    --glass-border: rgba(255, 255, 255, 0.15);
+    --text-shadow: 0 0 10px rgba(188, 19, 254, 0.8);
+}
+
+* {
+    box-sizing: border-box;
 }
 
 body {
     margin: 0;
     padding: 0;
     height: 100vh;
-    background: radial-gradient(circle at center, #3a0066 0%, var(--deep-purple) 100%);
+    width: 100vw;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    font-family: 'Montserrat', 'Segoe UI', sans-serif;
+    font-family: 'Montserrat', sans-serif;
+    color: white;
     overflow: hidden;
+    
+    /* ТВОЙ ФОН с наложением градиента для глубины */
+    background: linear-gradient(rgba(10, 0, 26, 0.5), rgba(10, 0, 26, 0.5)), 
+                url('assets/Backgroundforgame.webp') no-repeat center center;
+    background-size: cover;
 }
 
-/* --- ЛОГОТИП (АВАТАРКА) --- */
+/* --- ЛОГОТИП-АВАТАРКА --- */
 .logo-wrapper {
     position: relative;
-    margin-bottom: 50px;
-    animation: floatLogo 4s ease-in-out infinite; /* Покачивание выше всех */
-    z-index: 100;
+    margin-bottom: 40px;
+    z-index: 10;
+    animation: floatingLogo 4s ease-in-out infinite;
 }
 
 .main-avatar {
-    width: 160px;
-    height: 160px;
+    width: 150px;
+    height: 150px;
     border-radius: 50%;
     border: 4px solid var(--neon-purple);
-    box-shadow: 0 0 40px var(--neon-purple);
+    box-shadow: 0 0 30px var(--neon-purple), inset 0 0 15px var(--neon-purple);
     object-fit: cover;
+    transition: 0.5s;
 }
 
-/* Сверкание на аватарке */
+/* Эффект сверкания на аве */
 .logo-wrapper::after {
     content: '';
     position: absolute;
     top: 0; left: -100%;
     width: 50%; height: 100%;
-    background: var(--shine-grad);
-    transform: skewX(-30deg);
-    animation: autoShine 5s infinite ease-in-out;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    transform: skewX(-20deg);
+    animation: autoShine 6s infinite linear;
 }
 
-/* --- КНОПКИ ИГР --- */
+/* --- КОНТЕЙНЕР КНОПОК --- */
 .games-menu {
     display: flex;
-    gap: 35px;
-    margin-bottom: 80px;
+    gap: 40px;
+    margin-bottom: 60px;
 }
 
 .hub-button {
-    width: 190px;
-    height: 240px;
-    background: var(--glass-bg);
-    border: 1px solid rgba(255,255,255,0.1);
+    width: 200px;
+    height: 260px;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(15px);
+    border: 1px solid var(--glass-border);
     border-radius: 30px;
-    backdrop-filter: blur(12px);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-decoration: none;
     color: white;
-    position: relative;
-    overflow: hidden;
     transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    animation: floatButtons 6s ease-in-out infinite;
+    animation: floatingButtons 5s ease-in-out infinite;
 }
 
-.hub-button:nth-child(2) { animation-delay: 1.5s; }
+.hub-button:nth-child(2) { animation-delay: 1s; }
 
 .hub-button:hover {
-    transform: translateY(-15px) scale(1.05);
+    transform: translateY(-20px) scale(1.08);
     border-color: var(--neon-purple);
-    box-shadow: 0 0 50px var(--neon-purple);
+    box-shadow: 0 0 40px rgba(188, 19, 254, 0.5);
+    background: rgba(255, 255, 255, 0.08);
 }
 
-.btn-icon { font-size: 4.5rem; margin-bottom: 15px; }
-.btn-label { font-weight: 800; letter-spacing: 3px; font-size: 1.1rem; }
+.btn-icon {
+    font-size: 5rem;
+    margin-bottom: 20px;
+    filter: drop-shadow(0 0 10px var(--neon-purple));
+}
 
-/* --- КНОПКА PLAY --- */
-.action-zone { margin-top: 20px; }
+.btn-label {
+    font-weight: 900;
+    letter-spacing: 2px;
+    text-shadow: var(--text-shadow);
+}
 
+/* --- КНОПКА PLAY (ULTRA PULSE) --- */
 .call-to-action {
-    background: linear-gradient(45deg, #ff00ff, var(--neon-purple));
-    padding: 22px 100px;
-    border-radius: 60px;
-    font-size: 2.2rem;
+    background: linear-gradient(45deg, var(--neon-pink), var(--neon-purple));
+    padding: 20px 100px;
+    border-radius: 50px;
+    font-size: 2.5rem;
     font-weight: 900;
     border: none;
     color: white;
     cursor: pointer;
-    box-shadow: 0 0 30px var(--neon-purple);
-    transition: 0.3s;
+    text-transform: uppercase;
+    box-shadow: 0 0 20px var(--neon-purple);
     animation: pulsePlay 2s infinite ease-in-out;
+    transition: 0.3s;
+}
+
+.call-to-action:hover {
+    filter: brightness(1.2);
+    box-shadow: 0 0 50px var(--neon-pink);
 }
 
 /* --- АНИМАЦИИ --- */
-@keyframes floatLogo {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-30px); }
+@keyframes floatingLogo {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-30px) rotate(2deg); }
 }
 
-@keyframes floatButtons {
+@keyframes floatingButtons {
     0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-20px); }
+    50% { transform: translateY(-15px); }
 }
 
 @keyframes autoShine {
     0% { left: -150%; }
-    20% { left: 250%; }
+    30% { left: 250%; }
     100% { left: 250%; }
 }
 
 @keyframes pulsePlay {
-    0%, 100% { transform: scale(1); filter: brightness(1); }
-    50% { transform: scale(1.15); filter: brightness(1.4); }
+    0%, 100% { transform: scale(1); box-shadow: 0 0 20px var(--neon-purple); }
+    50% { transform: scale(1.1); box-shadow: 0 0 60px var(--neon-pink); }
 }
 
-/* Стиль для вылетающих предметов */
+/* ЧАСТИЦЫ ЛУТА */
 .particle {
     position: absolute;
     pointer-events: none;
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
     z-index: 999;
+    filter: drop-shadow(0 0 10px white);
 }
