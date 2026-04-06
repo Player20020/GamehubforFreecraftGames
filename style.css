@@ -1,10 +1,7 @@
-/* Переменные и шрифты */
 :root {
     --neon-purple: #bc13fe;
     --neon-pink: #ff00ff;
-    --dark-void: #0a001a;
-    --glass-ui: rgba(255, 255, 255, 0.05);
-    --glass-border: rgba(255, 255, 255, 0.15);
+    --glass-border: rgba(255, 255, 255, 0.2);
 }
 
 * { box-sizing: border-box; }
@@ -12,181 +9,132 @@
 body {
     margin: 0; padding: 0;
     height: 100vh; width: 100vw;
-    display: flex; flex-direction: column; align-items: center;
-    font-family: 'Montserrat', 'Segoe UI', sans-serif;
-    color: white; overflow: hidden; /* Запрещаем прокрутку */
-    
-    /* ТВОЙ ФОН на весь экран */
-    background: linear-gradient(rgba(10, 0, 26, 0.6), rgba(10, 0, 26, 0.6)), 
+    display: flex; flex-direction: column;
+    font-family: 'Montserrat', sans-serif;
+    color: white; overflow: hidden;
+    background: linear-gradient(rgba(10, 0, 26, 0.7), rgba(10, 0, 26, 0.7)), 
                 url('assets/Backgroundforgame.webp') no-repeat center center fixed;
     background-size: cover;
 }
 
-/* --- 1. ИСПРАВЛЕННАЯ АВАТАРКА (ВЕРХ ЭКРАНА) --- */
+/* --- АВАТАРКА --- */
 .logo-area {
     position: absolute;
-    top: 5vh; /* Отступ сверху (стабильный на всех телефонах) */
-    display: flex; justify-content: center; width: 100%;
+    top: 8%; left: 50%;
+    transform: translateX(-50%);
     z-index: 100;
 }
 
 .main-avatar {
-    /* ПОКАЧИВАЕТСЯ НА МЕСТЕ, КАК ТЫ ПРОСИЛ */
-    width: 120px; height: 120px;
+    width: 140px; height: 140px;
     border-radius: 50%;
     border: 4px solid var(--neon-purple);
-    box-shadow: 0 0 40px rgba(188, 19, 254, 0.8), inset 0 0 20px rgba(188, 19, 254, 0.4);
-    object-fit: cover;
-    
-    /* Единая анимация для авы и кнопок (только вверх-вниз) */
+    box-shadow: 0 0 30px var(--neon-purple);
     animation: floatingVertical 4s ease-in-out infinite;
 }
 
-/* Эффект сверкания на аве */
-.logo-area::after {
-    content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-    transform: skewX(-20deg); animation: autoShine 6s infinite linear;
-}
-
-/* --- 2. КОНТЕЙНЕР ДЛЯ ХАОСА (ИСПРАВЛЕННЫЙ РАЗБРОС) --- */
+/* --- КНОПКИ (РАЗНЕСЛИ ПО ЭКРАНУ) --- */
 .floating-icons-menu {
-    position: absolute;
-    top: 35vh; /* Размещаем зону кнопок в центре экрана */
-    width: 85%; /* Уменьшили ширину, чтобы не улетали */
-    height: 35vh; /* Высота зоны кнопок */
-    z-index: 50;
+    position: relative;
+    width: 100%; height: 100%;
 }
 
-/* Общие стили для БОЛЬШИХ круглых иконок */
 .hub-icon-btn {
     position: absolute;
-    width: 110px; height: 110px; /* КНОПКИ СДЕЛАЛИ БОЛЬШЕ (были маленькие) */
+    /* РАЗМЕР КНОПОК - ТЕПЕРЬ СОЛИДНЫЕ */
+    width: 125px; height: 125px; 
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.04);
+    background: rgba(255, 255, 255, 0.05);
     border: 2px solid var(--glass-border);
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(15px);
     display: flex; align-items: center; justify-content: center;
-    font-size: 3.8rem; /* Иконку внутри тоже увеличили */
+    font-size: 4rem;
     cursor: pointer;
-    transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
-    
-    /* ТОЛЬКО ВВЕРХ И ВНИЗ (ОНИ БОЛЬШЕ НЕ УХОДЯТ В БОК) */
-    animation: floatingVertical 4s ease-in-out infinite;
+    box-shadow: 0 0 20px rgba(188, 19, 254, 0.3);
+    animation: floatingVertical 5s ease-in-out infinite;
 }
 
-/* Свечение при наведении */
-.hub-icon-btn:hover {
-    transform: scale(1.15) translateY(-5px);
-    border-color: var(--neon-purple);
-    box-shadow: 0 0 40px rgba(188, 19, 254, 0.8);
-}
-
-/* РАССТАНОВКА (СТАБИЛЬНАЯ НА ВСЕХ ТЕЛЕФОНАХ) */
+/* Точные позиции, чтобы не липли */
 .casino-icon {
-    left: 5vw; top: 5vh; /* Разместили более стабильно */
+    left: 10%; top: 35%; /* Левая кнопка */
 }
 
 .coins-icon {
-    right: 5vw; top: 10vh; /* Разместили более стабильно */
+    right: 10%; top: 45%; /* Правая кнопка - ниже первой */
     animation-delay: 1.5s;
 }
 
 .soon-icon {
-    left: 30vw; bottom: 0; /* Разместили более стабильно */
-    opacity: 0.5;
-    animation-delay: 2s;
+    left: 50%; bottom: 15%; /* Нижняя по центру */
+    transform: translateX(-50%);
+    opacity: 0.4;
+    animation-delay: 2.5s;
 }
 
-/* --- 3. СКРЫТЫЙ КОНТРОЛЬНЫЙ ЦЕНТР (СНИЗУ, ВЫЕЗЖАЕТ КРАСИВО) --- */
+/* --- ВЫЕЗЖАЮЩАЯ ПАНЕЛЬ (ИЗ КНОПКИ) --- */
 .control-center {
     position: fixed;
-    /* ИСПРАВИЛИ: ПОЯВЛЕНИЕ. Тепеперь она ПОЛНОСТЬЮ выезжает снизу */
-    bottom: -120%; /* Скрыта за пределами экрана */
-    left: 50%; transform: translateX(-50%);
-    width: 95%; max-width: 600px; /* Сделали панель шире */
-    background: rgba(10, 0, 26, 0.98);
-    backdrop-filter: blur(25px);
+    /* Изначально глубоко внизу */
+    bottom: -100%; 
+    left: 5%; right: 5%;
+    width: 90%;
+    background: rgba(15, 0, 30, 0.95);
+    backdrop-filter: blur(20px);
     border: 2px solid var(--neon-purple);
-    border-radius: 35px 35px 0 0; /* Округлые края сверху */
-    padding: 35px; /* Увеличили внутренние отступы */
+    border-radius: 40px 40px 0 0;
+    padding: 40px 20px;
     z-index: 200;
     display: flex; flex-direction: column; align-items: center;
-    /* ПЛАВНОЕ ВЫЕЗЖАНИЕ (Cubic Bezier дает красивый эффект) */
-    transition: bottom 0.6s cubic-bezier(0.25, 1, 0.5, 1); 
-    box-shadow: 0 -15px 50px rgba(188, 19, 254, 0.4);
+    /* Плавный выезд */
+    transition: all 0.7s cubic-bezier(0.19, 1, 0.22, 1);
+    box-shadow: 0 -20px 50px rgba(0,0,0,0.8);
 }
 
-/* Класс для показа панели (добавим JS) */
 .control-center.active {
     bottom: 0; /* Выезжает в рабочее положение */
 }
 
-/* Кнопка закрытия панели (крестик) */
+/* Кнопка закрытия */
 .close-btn {
-    position: absolute; top: 20px; right: 25px;
+    position: absolute; top: 15px; right: 25px;
     background: none; border: none; color: white;
-    font-size: 2.5rem; cursor: pointer; opacity: 0.6;
-    transition: 0.3s;
-}
-.close-btn:hover { opacity: 1; transform: rotate(90deg); }
-
-/* Описание игры */
-.game-details {
-    text-align: center; margin-bottom: 35px; margin-top: 15px;
+    font-size: 2.5rem; cursor: pointer;
 }
 
 .game-details h2 {
-    font-size: 2.5rem; margin: 0 0 15px 0; /* Заголовок больше */
-    text-transform: uppercase; letter-spacing: 4px;
-    text-shadow: 0 0 15px rgba(188, 19, 254, 0.9);
-    background: linear-gradient(to right, #ffffff, var(--neon-purple));
-    -webkit-background-clip: text; color: transparent;
+    font-size: 2.8rem; margin: 0 0 15px 0;
+    text-shadow: 0 0 15px var(--neon-purple);
 }
 
 .game-details p {
-    /* ОПИСАНИЕ УВЕЛИЧИЛИ (было мелким) */
-    font-size: 1.25rem; color: rgba(255, 255, 255, 0.9);
-    line-height: 1.8; max-width: 450px; margin: 0;
+    font-size: 1.3rem; line-height: 1.6;
+    margin-bottom: 30px; opacity: 0.9;
+    text-align: center;
 }
 
-/* КНОПКА PLAY-ИГРАТЬ (Внутри панели, БОЛЬШАЯ И ПУЛЬСИРУЮЩАЯ) */
 .call-to-action-compact {
     background: linear-gradient(45deg, var(--neon-pink), var(--neon-purple));
-    padding: 22px 100px; /* Кнопку тоже увеличили */
-    border-radius: 65px;
+    padding: 22px 90px;
+    border-radius: 50px;
     font-size: 2.2rem; font-weight: 900;
-    border: none; color: white;
-    cursor: pointer; text-transform: uppercase;
-    text-decoration: none; /* Убираем подчеркивание */
-    box-shadow: 0 0 25px var(--neon-purple);
-    animation: pulsePlay 2s infinite ease-in-out;
-    transition: 0.3s;
-    letter-spacing: 3px;
-}
-.call-to-action-compact:hover {
-    filter: brightness(1.2); box-shadow: 0 0 60px rgba(255, 0, 255, 0.9);
+    color: white; text-decoration: none;
+    box-shadow: 0 0 30px var(--neon-pink);
+    animation: pulsePlay 2s infinite;
 }
 
-/* --- АНИМАЦИИ (ПОКАЧИВАНИЕ) --- */
-/* ЕДИНАЯ АНИМАЦИЯ: ТОЛЬКО ВВЕРХ И ВНИЗ (без разлета в бока) */
+/* --- АНИМАЦИИ --- */
 @keyframes floatingVertical {
     0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-30px); }
-}
-
-@keyframes autoShine {
-    0% { left: -150%; } 30% { left: 250%; } 100% { left: 250%; }
+    50% { transform: translateY(-35px); }
 }
 
 @keyframes pulsePlay {
-    0%, 100% { transform: scale(1); box-shadow: 0 0 25px rgba(188, 19, 254, 0.7); }
-    50% { transform: scale(1.1); box-shadow: 0 0 70px rgba(255, 0, 255, 0.9); }
+    0%, 100% { transform: scale(1); filter: brightness(1); }
+    50% { transform: scale(1.05); filter: brightness(1.2); }
 }
 
-/* Стиль частиц (лута) */
+/* Частицы лута */
 .particle {
     position: absolute; pointer-events: none;
-    width: 60px; height: 60px; z-index: 999;
+    width: 60px; height: 60px; z-index: 1000;
 }
